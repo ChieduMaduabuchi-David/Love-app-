@@ -13,5 +13,5 @@ employee
 
 
 Idea for polymorphism
-user and premium user have same functions with preiumsgoing some  extra steps
+user and premium user have same functions with preiums going some  extra steps
 
