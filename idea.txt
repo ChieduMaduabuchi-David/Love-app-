@@ -1,0 +1,17 @@
+objects
+people
+
+different sub classes:
+Users:
+premium and non premium
+
+employee
+
+
+
+
+
+
+Idea for polymorphism
+user and premium user have same functions with preiumsgoing some  extra steps
+

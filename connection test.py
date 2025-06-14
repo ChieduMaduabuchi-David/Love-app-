@@ -3,6 +3,7 @@ import datetime
 import pytz
 import time
 import json
+import chromadb
 
 host = socket.gethostbyname(socket.gethostname())
 port = 46830
