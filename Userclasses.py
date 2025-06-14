@@ -43,7 +43,7 @@ class User:
         self.religion =religion
         self.interest =interest
         self.intro = intro
-        self.desire = Desire
+        self.desire = desire
 
 
     def age(self):
@@ -78,8 +78,8 @@ class User:
                 f"height: {self.height}.\n"
                 f"religion: {self.religion}.\n"
                 f"interest: {', '.join(self.interest)}.\n"
-                f"intro {self.intro}.\n"
-                f"Desire {self.desire}\n")
+                f"intro: {self.intro}.\n"
+                "Desire: "+str(self.desire)+"\n")
 
     def message(self):
         pass

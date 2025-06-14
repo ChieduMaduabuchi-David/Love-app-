@@ -126,13 +126,26 @@ user5 = User(
         height=height(168),
         intro="A fun-loving and thoughtful partner who loves dogs.")
 )
+
+
+# print(eval(user5.desire))
+#print(str(user5))
+# print(str(user5.desire))
+# print(user5.desire)
+# print(repr(user5.desire))
+# print(type(user5.desire))
+# print(isinstance(user5.desire, Desire))
+
+
+# print(user5.desire)
+
 userlist = [user1, user2, user3, user4, user5]
 
 for user in userlist:
     embed(user)
 
 
-
+print(search(user5.desire))
 
 
 
