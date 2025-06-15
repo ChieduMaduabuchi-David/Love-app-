@@ -12,120 +12,100 @@ from Database import *
 
 user1 = User(
     id=1,
-    name="Liam Garcia",
-    username="liamg",
-    birthdate=datetime.datetime(1993, 8, 17),
+    name="Alice Smith",
+    username="asmith",
+    birthdate=datetime.datetime(1997, 6, 14),
     photo=None,
-    sex="male",
-    location="Madrid",
-    nationality="Spanish",
-    height=height(178),
-    religion="Atheist",
-    interest=["football", "guitar", "travel"],
-    intro="Easygoing guy who loves live music and road trips.",
-    desire=Desire(
-        age=25,
-        photo=None,
-        sex="female",
-        location="Barcelona",
-        nationality="Spanish",
-        height=height(165),
-        intro="Looking for someone spontaneous and adventurous.")
+    sex="FEMALE",
+    location="Berlin",
+    nationality="German",
+    height=height(165),
+    religion="Christianity",
+    interest=["hiking", "traveling"],
+    intro="Adventurous and curious."
 )
-
+user1.default_desire()
 
 user2 = User(
     id=2,
-    name="Aisha Khan",
-    username="aishak",
-    birthdate=datetime.datetime(1997, 5, 12),
+    name="Bob Johnson",
+    username="bobbyj",
+    birthdate=datetime.datetime(1990, 3, 10),
     photo=None,
-    sex="female",
-    location="Dubai",
-    nationality="Emirati",
-    height=height(160),
-    religion="Muslim",
-    interest=["fashion", "calligraphy", "movies"],
-    intro="A creative soul who enjoys deep conversations.",
+    sex="MALE",
+    location="Warsaw",
+    nationality="Polish",
+    height=height(180),
+    religion="Agnostic",
+    interest=["coding", "chess"],
+    intro="Quiet thinker who loves puzzles.",
     desire=Desire(
         age=30,
         photo=None,
-        sex="male",
-        location="Abu Dhabi",
-        nationality="Emirati",
-        height=height(180),
-        intro="Seeking someone mature with a sense of humor.")
+        sex="FEMALE",
+        location="Warsaw",
+        nationality="Polish",
+        height=height(170),
+        intro="Someone who loves logic."
+    )
 )
-
 
 user3 = User(
     id=3,
-    name="Noah Schmidt",
-    username="noah_s",
-    birthdate=datetime.datetime(1990, 11, 3),
+    name="Carlos Diaz",
+    username="cdiaz",
+    birthdate=datetime.datetime(1985, 12, 5),
     photo=None,
-    sex="male",
-    location="Munich",
-    nationality="German",
-    height=height(182),
-    religion="Christian",
-    interest=["cycling", "photography", "board games"],
-    intro="Nature enthusiast and amateur photographer.",
-    desire=Desire(
-        age=28,
-        photo=None,
-        sex="female",
-        location="Berlin",
-        nationality="German",
-        height=height(170),
-        intro="Someone who loves the outdoors and art.")
+    sex="MALE",
+    location="Madrid",
+    nationality="Spanish",
+    height=height(175),
+    religion="Catholic",
+    interest=["football", "music"],
+    intro="Easygoing and loyal."
 )
+user3.default_desire()
 
 user4 = User(
     id=4,
-    name="Mei Lin",
-    username="meilin88",
-    birthdate=datetime.datetime(1995, 2, 25),
+    name="Diana Petrova",
+    username="dpetrova",
+    birthdate=datetime.datetime(1993, 11, 20),
     photo=None,
-    sex="female",
-    location="Shanghai",
-    nationality="Chinese",
-    height=height(158),
-    religion="Buddhist",
-    interest=["reading", "tea ceremony", "yoga"],
-    intro="Peaceful and kind-hearted, looking for real connection.",
+    sex="FEMALE",
+    location="Sofia",
+    nationality="Bulgarian",
+    height=height(160),
+    religion="Orthodox",
+    interest=["dancing", "photography"],
+    intro="Creative spirit.",
     desire=Desire(
-        age=29,
+        age=33,
         photo=None,
-        sex="male",
-        location="Beijing",
-        nationality="Chinese",
-        height=height(175),
-        intro="Wants a calm and balanced relationship.")
+        sex="MALE",
+        location="Sofia",
+        nationality="Bulgarian",
+        height=height(180),
+        intro="Must love the arts."
+    )
 )
 
 user5 = User(
     id=5,
-    name="David Brown",
-    username="daveb",
-    birthdate=datetime.datetime(1988, 7, 1),
+    name="Ethan Lee",
+    username="elee",
+    birthdate=datetime.datetime(2001, 1, 25),
     photo=None,
-    sex="male",
-    location="Toronto",
-    nationality="Canadian",
-    height=height(185),
-    religion="Agnostic",
-    interest=["coding", "sci-fi", "dogs"],
-    intro="Techie with a love for good stories and golden retrievers.",
-    desire=Desire(
-        age=32,
-        photo=None,
-        sex="female",
-        location="Vancouver",
-        nationality="Canadian",
-        height=height(168),
-        intro="A fun-loving and thoughtful partner who loves dogs.")
+    sex="MALE",
+    location="London",
+    nationality="British",
+    height=height(178),
+    religion=None,
+    interest=["gaming", "reading"],
+    intro="Looking for deep conversations."
 )
+user5.default_desire()
+
 
 
 # print(eval(user5.desire))
@@ -143,11 +123,11 @@ userlist = [user1, user2, user3, user4, user5]
 
 
 '''Testing adding and searching for users'''
-# for user in userlist:
-#     embed(user)
-#
-#
-# print(search(user5))
+for user in userlist:
+    embed(user)
+
+
+print(search(user5))
 
 
 

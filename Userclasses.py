@@ -3,7 +3,6 @@ import pytz
 from pytz import timezone
 
 
-
 class height:
     def __init__ (self, distance:float):
         self.cm=distance
@@ -11,6 +10,19 @@ class height:
 
     def __repr__(self):
         return f"{self.cm} cm ({self.feet:.2f} ft)"
+
+    def __add__(self,value):
+        return self.cm + value
+
+    def __radd__(self,value):
+        return self.cm + value
+
+    def __sub__(self, value):
+        return self.cm - value
+
+    def __rsub__(self, value):
+        return self.cm - value
+
 
 class Sex:
     def __init__(self,sex:str):
@@ -56,12 +68,14 @@ class Desire:
 
 # class of a user
 class User:
-    def __init__(self, id: int, name: str, username: str, birthdate: datetime.datetime,photo: None, sex: str,location: str,
+    def __init__(self, id: int, name: str, username: str, birthdate: datetime.datetime, sex: str,location: str, email: str = None,phone: str = None, photo:int = None,
                  nationality = None, height: height = None, religion: str = None, interest: list = None, intro: str= None, desire: Desire =None):
-        self.id = id
+        self._id = id
         self.name = name
         self.u_name= username
-        self.birthdate = birthdate
+        self.email=email
+        self.phone_number=phone
+        self._birthdate = birthdate
         self.photo = photo
         self.sex = Sex(sex)
         self.location = location
@@ -76,9 +90,9 @@ class User:
     def age(self):
         '''this has to be edited to take geolocation data from client'''
         todaysdate = datetime.datetime.now(timezone('Europe/Warsaw'))
-        age = todaysdate.year - pytz.utc.localize(self.birthdate).year
+        age = todaysdate.year - pytz.utc.localize(self._birthdate).year
         #acconts for the difference in months
-        if (todaysdate.month, todaysdate.day) < (self.birthdate.month, self.birthdate.day):
+        if (todaysdate.month, todaysdate.day) < (self._birthdate.month, self._birthdate.day):
             age -= 1
         return age
 
@@ -94,7 +108,7 @@ class User:
     #     intro {self.intro}.'''
 
     def __repr__(self):
-        return (f"user id : {self.id}.\n"
+        return (f"user id : {self._id}.\n"
                 f"Name: {self.name}.\n"
                 f"username: {self.u_name}.\n"
                 f"age: {self.age()}.\n"
@@ -109,6 +123,12 @@ class User:
                 "Desire: "+str(self.desire)+"\n")
 
     def default_desire(self):
+        dheight=None
+        if self.height != None:
+            if self.sex.value == "FEMALE":
+                dheight=21+self.height
+            else:
+                dheight=self.height-11.43
 
         self.desire = Desire(
             age=self.age(),
@@ -116,7 +136,7 @@ class User:
             sex=self.sex.flip(),
             location=self.location,
             nationality=self.nationality,
-            height=None,
+            height=dheight,
             intro=self.intro,
             interest=self.interest
         )
