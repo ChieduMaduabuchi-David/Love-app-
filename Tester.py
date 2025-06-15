@@ -130,7 +130,7 @@ user5 = User(
 
 # print(eval(user5.desire))
 #print(str(user5))
-# print(str(user5.desire))
+#print(str(user5.desire))
 # print(user5.desire)
 # print(repr(user5.desire))
 # print(type(user5.desire))
@@ -141,11 +141,13 @@ user5 = User(
 
 userlist = [user1, user2, user3, user4, user5]
 
-for user in userlist:
-    embed(user)
 
-
-print(search(user5.desire))
+'''Testing adding and searching for users'''
+# for user in userlist:
+#     embed(user)
+#
+#
+# print(search(user5))
 
 
 

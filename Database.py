@@ -9,18 +9,18 @@ collection = chroma_client.create_collection(name="users")
 
 #embedding_function = embedding_fn)
 
-def embed(User):
+def embed(user):
     collection.add(
-        documents=[User.text()],
-        metadatas=[{"id": f"{User.id}", "name": f"{User.name}"}],
-        ids=[f"{User.id}"]
+        documents=[user.text()],
+        metadatas=[{"id": f"{user.id}", "name": f"{user.name}"}],
+        ids=[f"{user.id}"]
     )
 
-def search(User):
-    print(User.desire)
+def search(user):
+    # print(str(user.desire))
 
     results = collection.query(
-        query_texts= [str(User.desire)],
+        query_texts= [str(user.desire)],
         n_results=5
     )
     return results

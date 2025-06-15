@@ -12,15 +12,42 @@ class height:
     def __repr__(self):
         return f"{self.cm} cm ({self.feet:.2f} ft)"
 
+class Sex:
+    def __init__(self,sex:str):
+        sex = sex.upper().strip()
+        if sex == "MALE" or sex =="M":
+            sex="MALE"
+        elif sex == "FEMALE" or sex=="F":
+            sex = "FEMALE"
+        else:
+            sex = None
+            raise ValueError("Only Accepts Male or Female")
+        self.value = sex
+
+    def __str__(self):
+        return self.value
+
+    def __repr__(self):
+        return f"Sex('{self.value}')"
+
+    def flip(self):
+        if self.value == "MALE":
+            return "FEMALE"
+        else:
+            return "MALE"
+
+
 class Desire:
-    def __init__(self, age: int, photo, sex: str, location: str, nationality: str, height: height, intro: str):
+    def __init__(self, age: int = None, photo = None, sex: str = None, location: str = None, nationality: str = None, height: height= None, intro: str = None, religion: str = None, interest: list = None):
         self.age = age
         self.photo = photo
-        self.sex = sex
+        self.sex = Sex(sex)
         self.location = location
         self.nationality = nationality
         self.height = height
         self.intro = intro
+        self.religion = religion
+        self.interest = interest
 
     def __repr__(self):
         return (f"Desire(age={self.age}, photo={self.photo}, sex='{self.sex}', "
@@ -36,7 +63,7 @@ class User:
         self.u_name= username
         self.birthdate = birthdate
         self.photo = photo
-        self.sex = sex
+        self.sex = Sex(sex)
         self.location = location
         self.nationality = nationality
         self.height = height
@@ -55,16 +82,16 @@ class User:
             age -= 1
         return age
 
-    def text(self):
-        return f''' user id : {self.id}.
-        Name: {self.name}.
-        username: {self.u_name}.
-        age: {self.age()}. 
-        sex: {self.sex}.
-        location {self.location}. 
-        nationality {self.nationality}.
-        height: {self.height}.
-        intro {self.intro}.'''
+    # def text(self):
+    #     return f''' user id : {self.id}.
+    #     Name: {self.name}.
+    #     username: {self.u_name}.
+    #     age: {self.age()}.
+    #     sex: {self.sex}.
+    #     location {self.location}.
+    #     nationality {self.nationality}.
+    #     height: {self.height}.
+    #     intro {self.intro}.'''
 
     def __repr__(self):
         return (f"user id : {self.id}.\n"
@@ -80,6 +107,20 @@ class User:
                 f"interest: {', '.join(self.interest)}.\n"
                 f"intro: {self.intro}.\n"
                 "Desire: "+str(self.desire)+"\n")
+
+    def default_desire(self):
+
+        self.desire = Desire(
+            age=self.age(),
+            photo=None,
+            sex=self.sex.flip(),
+            location=self.location,
+            nationality=self.nationality,
+            height=None,
+            intro=self.intro,
+            interest=self.interest
+        )
+
 
     def message(self):
         pass
