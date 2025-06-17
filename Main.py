@@ -1,4 +1,5 @@
 import json
+from Database import *
 import threading
 import socket
 import Userclasses
@@ -19,14 +20,18 @@ def init_connect():
     #checks if the user wants to signup or login
     if signup=="True":
         signup_data = client.recv(1024).decode('utf-8')
-        signup_user(signup_data)
+        print(signup_data)
+        # verify_user(username, password)
+        # signup_user(signup_data,user)
     else :
         login_data = client.recv(1024).decode('utf-8')
         login_info = json.loads(login_data)
-        print(type(login_info))
+        print(login_info)
+        if verify_user(login_info['username'],login_info['password'])==0.0:
+            print("user not found")
 
-def signup_user(signup_data):
-    user = User()
+# def signup_user(signup_data):
+#     user = User()
 
 
 

@@ -1,6 +1,8 @@
 import datetime
 import pytz
 from pytz import timezone
+from dataclasses import dataclass, asdict
+import json
 
 
 class height:
@@ -140,6 +142,14 @@ class User:
             intro=self.intro,
             interest=self.interest
         )
+
+    def to_json(self):
+        return json.dumps(asdict(self))
+
+    @staticmethod
+    def from_json(json_str):
+        data = json.loads(json_str)
+        return User(**data)
 
 
     def message(self):

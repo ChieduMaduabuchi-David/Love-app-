@@ -28,11 +28,11 @@ password='123qwe'
 
 def test_firs_interaction(opt):
 
-    if message == 'Login' and opt == 1:
+    if message == 'Login' and opt == 0:
         self_socket.send('False'.encode('utf-8'))
 
         #creating login details
-        login_details_dict={'Username':username,'password':None}
+        login_details_dict={'Username':username,'password':password}
 
         # sending login details
         login_details = json.dumps(login_details_dict)
@@ -48,6 +48,8 @@ def test_firs_interaction(opt):
         signup_details = json.dumps(signup_details_dict)
         self_socket.send(signup_details.encode('utf-8'))
 
+
+test_firs_interaction(0)
 # client.listen(1)
 # while True:
 #     server, address = client.accept()
