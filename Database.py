@@ -19,13 +19,13 @@ CREATE TABLE IF NOT EXISTS users (
 ''')
 conn.commit()
 
+# embedding_fn = SentenceTransformerEmbeddingFunction(model_name="all-MiniLM-L6-v2")
+client = chromadb.PersistentClient(
+    "./userVector_DB"  # or any path you want
+)
+collection = client.get_or_create_collection(name="users")
 
-chroma_client = chromadb.Client()
-embedding_fn = SentenceTransformerEmbeddingFunction(model_name="all-MiniLM-L6-v2")
-client = chromadb.Client(chromadb.config.Settings(
-    persist_directory="./userVector_DB"  # or any path you want
-))
-collection = client.get_or_create_collection(name="users",embedding_function = embedding_fn)
+#embedding_function = embedding_fn)
 # use local sentence-transformers model
 
 
@@ -35,12 +35,13 @@ def register_user(user,password):
     try:
         cursor.execute(
             "INSERT INTO users (username, password_hash) VALUES (?, ?)",
-            (user.name, password_hash)
+            (user.u_name, password_hash)
         )
         conn.commit()
         user_id = cursor.lastrowid  # Get the new user's SQLite ID
 
         # Save user profile in ChromaDB with description
+        user._id = user_id #Have to change it to use a function in user
         embed(user)
         print("User registered and profile saved!")
     except sqlite3.IntegrityError:
@@ -48,15 +49,17 @@ def register_user(user,password):
 
 
 def verify_user(username, password):
-    cursor.execute("SELECT id, password_hash FROM users WHERE username = ?", (username))
+    cursor.execute("SELECT id, password_hash FROM users WHERE username = ?", (username,))
     row = cursor.fetchone()
     if row is None:
         return 0.0  # User not found
 
     user_id, stored_hash = row
     if bcrypt.checkpw(password.encode('utf-8'), stored_hash):
+        print('problem 1')
         return user_id
     else:
+        print('problem 2')
         return 0.1 # Incorrect password
 
 
@@ -66,9 +69,8 @@ def embed(user):
         metadatas=[{"name": f"{user.name}"}],
         ids=[f"{user._id}"]
     )
-    client.persist()
 
-def search(user):
+def recommend_users(user):
 
     results = collection.query(
         query_texts = [str(user.desire)],
@@ -77,5 +79,8 @@ def search(user):
     results = results['ids'][0]
     results.remove(str(user._id))
     return results
+
+def user_data(id):
+        result = collection.get(ids=[str(id)])
 
 

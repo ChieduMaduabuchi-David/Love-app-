@@ -1,4 +1,5 @@
-import datetime
+# from datetime import datetime
+import  datetime
 import pytz
 from pytz import timezone
 from dataclasses import dataclass, asdict
@@ -149,6 +150,7 @@ class User:
     @staticmethod
     def from_json(json_str):
         data = json.loads(json_str)
+        data['birthdate'] = datetime.datetime.strptime(data['birthdate'], "%Y-%m-%d %H:%M:%S")
         return User(**data)
 
 
