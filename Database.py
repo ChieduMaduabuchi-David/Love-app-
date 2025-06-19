@@ -1,6 +1,9 @@
+from itertools import count
+
 import chromadb
 import sqlite3
 import bcrypt
+import time
 from chromadb.config import Settings
 from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
 
@@ -18,6 +21,7 @@ CREATE TABLE IF NOT EXISTS users (
 )
 ''')
 conn.commit()
+conn.close()
 
 # embedding_fn = SentenceTransformerEmbeddingFunction(model_name="all-MiniLM-L6-v2")
 client = chromadb.PersistentClient(
@@ -32,25 +36,51 @@ collection = client.get_or_create_collection(name="users")
 def register_user(user,password):
     salt = bcrypt.gensalt()
     password_hash = bcrypt.hashpw(password.encode('utf-8'), salt)
-    try:
-        cursor.execute(
-            "INSERT INTO users (username, password_hash) VALUES (?, ?)",
-            (user.u_name, password_hash)
-        )
-        conn.commit()
-        user_id = cursor.lastrowid  # Get the new user's SQLite ID
+    count=0
+    for attempt in range(5):
+        try:
+            conn = sqlite3.connect('auth.db')
+            cursor = conn.cursor()
+            print(user.u_name)
+            print(user._id)
+            cursor.execute(
+                "INSERT INTO users (username, password_hash) VALUES (?, ?)",
+                (user.u_name, password_hash)
+            )
+            conn.commit()
+            conn.close()
+            user_id = cursor.lastrowid  # Get the new user's SQLite ID
 
-        # Save user profile in ChromaDB with description
-        user._id = user_id #Have to change it to use a function in user
-        embed(user)
-        print("User registered and profile saved!")
-    except sqlite3.IntegrityError:
-        print("Username already taken.")
+            # Save user profile in ChromaDB with description
+            user._id = user_id #Have to change it to use a function in user
+            embed(user)
+            print(100)
+            return "User registered and profile saved!"
+        except sqlite3.IntegrityError:
+            print(200)
+            conn.close()
+            return "Username already taken."
+        except sqlite3.OperationalError as e:
+            print(300)
+            if "database is locked" in str(e):
+                conn.close()
+                count +=count
+                time.sleep(0.01)  # Wait a bit and retry
+            else:
+                conn.close()
+                return "ERROR SAVING !!!!!"
+    if count>=5:
+        return 'too may ops'
+    return 'i knoweth not'
 
 
 def verify_user(username, password):
+    conn = sqlite3.connect('auth.db')
+    cursor = conn.cursor()
     cursor.execute("SELECT id, password_hash FROM users WHERE username = ?", (username,))
     row = cursor.fetchone()
+    conn.commit()
+    conn.close()
     if row is None:
         return 0.0  # User not found
 
@@ -61,6 +91,7 @@ def verify_user(username, password):
     else:
         print('problem 2')
         return 0.1 # Incorrect password
+
 
 
 def embed(user):

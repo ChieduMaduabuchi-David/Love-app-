@@ -65,41 +65,34 @@ host = socket.gethostbyname(socket.gethostname())
 port = 46830
 
 
-self_socket= socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-while True:
-    try:
-        self_socket.connect((host,port))
-        break
-    except ConnectionRefusedError:
-        continue
 
-message = self_socket.recv(1024).decode('utf-8')
 
 #Username and password will be properly implemented in the client side
-username=users[0]['username']
-password='123qwe'
+
 
 #cheking letting the server know the user wants to login
 
-def test_firs_interaction(opt):
+def test_first_interaction(opt):
 
     if opt == 0:
         # want to sign up
-        self_socket.send('False'.encode('utf-8'))
+        self_socket.send('True'.encode('utf-8'))
 
         #creating new login details
-        login_details_dict={'Username':username,'password':password}
+        signup_details_dict={'Username':username,'password':password}
+        print(username,"+++",password)
 
         # sending new login details
-        login_details = json.dumps(login_details_dict)
-        self_socket.send(login_details.encode('utf-8'))
+        signup_details = json.dumps(signup_details_dict)
+        self_socket.send(signup_details.encode('utf-8'))
 
         # sending new user details
-        signup_details = json.dumps(users[0])
+        signup_details = json.dumps(users[i])
         self_socket.send(signup_details.encode('utf-8'))
         print(self_socket.recv(1024).decode('utf-8'))
     else:
+        # want to login
         self_socket.send('True'.encode('utf-8'))
 
         # creating login details
@@ -109,9 +102,25 @@ def test_firs_interaction(opt):
 
         print(self_socket.recv(1024).decode('utf-8'))
 
+# for user in users:
+#     print(user)
+for i in range(10):
+    self_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    while True:
+        try:
+            self_socket.connect((host, port))
+            break
+        except ConnectionRefusedError:
+            continue
+    message = self_socket.recv(1024).decode('utf-8')
+    print(message)
+    username = users[i]['username']
+    password = passwords[i]
+    test_first_interaction(0)
+    print(i)
+    self_socket.close()
 
 
-test_firs_interaction(0)
 # client.listen(1)
 # while True:
 #     server, address = client.accept()
