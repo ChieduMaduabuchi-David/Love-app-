@@ -149,9 +149,12 @@ class User:
 
     @staticmethod
     def from_json(json_str):
-        data = json.loads(json_str)
-        data['birthdate'] = datetime.datetime.strptime(data['birthdate'], "%Y-%m-%d %H:%M:%S")
-        return User(**data)
+        try:
+            data = json.loads(json_str)
+            data['birthdate'] = datetime.datetime.strptime(data['birthdate'], "%Y-%m-%d %H:%M:%S")
+            return User(**data)
+        except ValueError as e:
+            raise e
 
 
     def message(self):
@@ -170,8 +173,9 @@ class Preminum_User (User):
     def message(self):
         pass
 
-    def search(self):
-        pass
+    def search(self,param):
+        match: param
+        case: ""
         #It will have some kind of pass_port mode
 
     def profile_view(self):

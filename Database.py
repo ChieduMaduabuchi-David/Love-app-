@@ -23,11 +23,11 @@ CREATE TABLE IF NOT EXISTS users (
 conn.commit()
 conn.close()
 
-# embedding_fn = SentenceTransformerEmbeddingFunction(model_name="all-MiniLM-L6-v2")
+embedding_fn = SentenceTransformerEmbeddingFunction(model_name="all-MiniLM-L6-v2")
 client = chromadb.PersistentClient(
     "./userVector_DB"  # or any path you want
 )
-collection = client.get_or_create_collection(name="users")
+collection = client.get_or_create_collection(name="users",embedding_function=embedding_fn)
 
 #embedding_function = embedding_fn)
 # use local sentence-transformers model
@@ -41,8 +41,8 @@ def register_user(user,password):
         try:
             conn = sqlite3.connect('auth.db')
             cursor = conn.cursor()
-            print(user.u_name)
-            print(user._id)
+            # print(user.u_name)
+            # print(user._id)
             cursor.execute(
                 "INSERT INTO users (username, password_hash) VALUES (?, ?)",
                 (user.u_name, password_hash)
@@ -53,8 +53,12 @@ def register_user(user,password):
 
             # Save user profile in ChromaDB with description
             user._id = user_id #Have to change it to use a function in user
-            embed(user)
-            print(100)
+            try:
+                embed(user)
+            except PermissionError:
+                print(f"Data base discrepancy at {user._id}")
+
+            print(user.name)
             return "User registered and profile saved!"
         except sqlite3.IntegrityError:
             print(200)
@@ -66,10 +70,10 @@ def register_user(user,password):
                 conn.close()
                 count +=count
                 time.sleep(0.01)  # Wait a bit and retry
-            else:
-                conn.close()
-                return "ERROR SAVING !!!!!"
-    if count>=5:
+            # else:
+            #     conn.close()
+            #     return "ERROR SAVING !!!!!"
+    if count>=4:
         return 'too may ops'
     return 'i knoweth not'
 
@@ -95,11 +99,17 @@ def verify_user(username, password):
 
 
 def embed(user):
-    collection.add(
-        documents=[str(user)],
-        metadatas=[{"name": f"{user.name}"}],
-        ids=[f"{user._id}"]
-    )
+    if user._id == []:
+        raise ValueError("NO ID given")
+    else:
+        if not collection.get(ids=[str(user._id)])['ids']:
+            collection.add(
+                documents=[str(user)],
+                metadatas=[{"name": f"{user.name}"}],
+                ids=[f"{user._id}"]
+            )
+        else:
+            raise PermissionError(f"Cannot register: user {user.u_name} already exists.")
 
 def recommend_users(user):
 
@@ -111,7 +121,8 @@ def recommend_users(user):
     results.remove(str(user._id))
     return results
 
-def user_data(id):
+def find_user(id):
         result = collection.get(ids=[str(id)])
+        return result
 
 
