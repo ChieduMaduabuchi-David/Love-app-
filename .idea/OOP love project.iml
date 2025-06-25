@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module version="4">
   <component name="NewModuleRootManager">
-    <content url="file://$MODULE_DIR$" />
-    <orderEntry type="jdk" jdkName="Python 3.11 virtualenv at /run/media/chiedumaduabuchi/a1ad1a8c-5f56-4247-95d8-22c85af2f0d3/home/chiedu/PycharmProjects/Love_app_OOP/.venv" jdkType="Python SDK" />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/.venv" />
+    </content>
+    <orderEntry type="jdk" jdkName="Python 3.11 virtualenv at ~/PycharmProjects/Love_app_OOP/.venv" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>
